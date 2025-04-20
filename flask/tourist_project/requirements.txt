@@ -1,0 +1,4 @@
+Flask==3.0.3
+psycopg2-binary
+gunicorn==23.0.0
+watchdog==5.0.3
