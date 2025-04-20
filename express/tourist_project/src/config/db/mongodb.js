@@ -1,6 +1,8 @@
+const MONGO_LINK=process.env.MONGO_LINK
+
 // Using Node.js `require()`
 const mongoose = require('mongoose');
-const MONGO_LINK=process.env.MONGO_LINK
+
 async function connect(){
     try {
         await mongoose.connect(MONGO_LINK)
@@ -12,4 +14,3 @@ async function connect(){
 }
 
 module.exports = { connect }
-

@@ -1,7 +1,7 @@
 //  import from library
 const express = require('express');
 const morgan = require('morgan');
-require('dotenv').config({path: '../../.env'});
+require('dotenv').config();
 
 // import from my file
 const route = require('./routes');
@@ -15,9 +15,8 @@ app = express();
 const port = 3000;
 
 app.use(morgan('combined'));
-app.use(express.static('public'));
 
-app.set('view engine' , 'pug');
+app.set('view engine' , 'ejs');
 app.set('views', 'src/views');
 route(app);
 
