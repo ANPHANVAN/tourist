@@ -76,6 +76,7 @@ services:
       - MONGO_LINK=${MONGO_LINK}
       - REDIS_HOST=${REDIS_HOST}
       - REDIS_PORT=${REDIS_PORT}
+      - REDIS_LINK=${REDIS_LINK}
     expose:
       - "3000"
     volumes:

@@ -16,7 +16,8 @@
     "express": "^4.21.2",
     "mongoose": "^8.13.2",
     "pg": "^8.14.1",
-    "pug": "^3.0.3"
+    "pug": "^3.0.3",
+    "redis": "^4.7.0"
   },
   "devDependencies": {
     "morgan": "^1.10.0",

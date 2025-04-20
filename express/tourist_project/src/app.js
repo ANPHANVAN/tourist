@@ -11,6 +11,9 @@ mongodb.connect()
 const postgre = require('./config/db/postgres');
 postgre.connect()
 
+const redis = require('./config/db/redis');
+redis.connect()
+
 app = express();
 const port = 3000;
 
