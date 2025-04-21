@@ -13,6 +13,6 @@ COPY . .
 
 EXPOSE 5000
 
-# CMD ["gunicorn", "--config", "gunicorn_config.py", "app:app"]
+# CMD ["gunicorn", "--config", "gunicorn_config.py", "--reload" "app:app"]
 
 CMD ["python", "run_dev.py"]

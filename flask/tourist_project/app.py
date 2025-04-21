@@ -2,8 +2,14 @@ from flask import Flask, jsonify
 import psycopg2
 from psycopg2.extras import RealDictCursor
 import os
+import logging
 
 app = Flask(__name__)
+
+# Thêm logging
+logging.basicConfig(level=logging.DEBUG)
+logger = logging.getLogger('werkzeug')
+logger.setLevel(logging.DEBUG)
 
 # # Cấu hình PostgreSQL từ biến môi trường
 # def get_db_connection():
@@ -43,11 +49,23 @@ def add():
 @app.route('/magana')
 def magana():
     return jsonify({'route': '/magana'})
+
 # Health check
 @app.route('/health')
 def health():
     return jsonify({'status': 'OK'})
 
+@app.route('/amazon')
+def amazon():
+    return jsonify({'route': '/amazon'})
+
+@app.route('/google')
+def google():
+    return jsonify({'route': '/google'})
+
+@app.route('/microsoft')
+def microsoft():
+    return jsonify({'route': '/microsoft'})
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
