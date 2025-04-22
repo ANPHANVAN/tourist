@@ -4,18 +4,7 @@ const router = express.Router();
 const siteController = require('../controllers/SiteController');
 const { query } = require('../config/db/postgres');
 const route = require('.');
-
-
-// [GET] /login
-router.get('/login', siteController.login)
-
-// [POST] /register-new
-router.post('/register-new', siteController.registerNew)
-
-// [GET] /register
-router.get('/register', siteController.register)
-
-// [GET] /health
+// [GET] /
 router.get('/health', (req, res) => {
     res.status(200).send('OK');
 });
