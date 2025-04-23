@@ -1,9 +1,8 @@
-
 //  import from library
 const express = require('express');
 const morgan = require('morgan');
 const expressLayouts = require('express-ejs-layouts');
-const jwt = require('jsonwebtoken');
+const cookieParser = require('cookie-parser');
 const session = require('./config/session');
 require('dotenv').config();
 
@@ -30,6 +29,7 @@ app.set('view engine' , 'ejs');
 app.set('views', 'src/views');
 app.set('layout', 'layouts/main'); // Đảm bảo layout chính được chỉ định
 app.use(expressLayouts);
+app.use(cookieParser());
 
 route(app);
 
