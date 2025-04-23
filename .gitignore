@@ -14,6 +14,7 @@
 # Byte-compiled / optimized / DLL files
 __pycache__/
 
+# plan files
+0_plan/
 0_plan/task.xlsx
-0_plan/.~task.xlsx
 *.xlsx
