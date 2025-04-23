@@ -15,3 +15,5 @@
 __pycache__/
 
 0_plan/task.xlsx
+0_plan/.~task.xlsx
+*.xlsx
