@@ -1,4 +1,17 @@
-h1 {
-    color: blue;
-    font-size: 2em;
+
+#navbarNav {
+    display: flex;
+    align-items: center;
+  }
+  
+#logout {
+margin-left: auto !important;
+}
+
+.text-center {
+color: aquamarine;
+}
+
+body {
+background: pink !important;
 }

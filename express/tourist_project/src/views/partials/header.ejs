@@ -35,7 +35,25 @@
                 <a class="nav-link" href="/contact">Contact</a>
               </li>
             </ul>
+
+            <ul id="logout" class="navbar-nav ms-auto">
+              <li class="nav-item">
+                <a class="nav-link" href="/logout">Logout</a>
+              </li>
+            </ul>
           </div>
         </div>
       </nav>
   </header>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      if ((window.location.pathname === "/logout") || (window.location.pathname === "/login") || (window.location.pathname === "/register")) {
+        const logout = document.getElementById("logout");
+        if (logout) {
+          logout.style.display = "none";
+        }
+      }
+    })
+  </script>
+  
