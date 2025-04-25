@@ -12,7 +12,10 @@ const Destination = new mongoose.Schema ({
     description : {
         type: String,
         required: [true, 'description is required'],
-        trim: true,
+    },
+    short_description : {
+        type: String,
+        required: [true, 'description is required'],
     },
     image_link: {
         type: String,
@@ -24,10 +27,20 @@ const Destination = new mongoose.Schema ({
         required: [true, 'image_alt is required'],
         trim: true,
     },
+    map_embed: {
+        type: String,
+    },
+    youtube_embed: {
+        type: String,
+    },
     slug: {
         type: String,
         slug: 'destination_name',
         unique: true,
+    },
+
+    destination_address: {
+        type: Object, // have full_address, country, province, district, 
     },
     createdAt: {
         type: Date,

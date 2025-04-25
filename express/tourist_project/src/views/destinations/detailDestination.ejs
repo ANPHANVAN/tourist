@@ -1,7 +1,6 @@
-<a href="/destinations">Go Back Destinations</a>
+<a href="/destination">Go Back Destinations</a>
 
 <div class="container mt-5">
-  <h2 class="text-center mb-4">Destination Details</h2>
   <% if (!destination) { %>
     <p class="text-center">No destination available.</p>
   <% } else { %>
@@ -9,14 +8,14 @@
       <div class="col">
         <div class="card h-100 shadow-sm">
           <div class="card-body">
-            <h5 class="card-title"><%= destination.destination_name || 'Unknown Destination' %></h5>
+            <h1 class="card-title text-center"><%= destination.destination_name || 'Unknown Destination' %></h1>
           </div>
           <img src="<%= destination.image_link || 'https://via.placeholder.com/300' %>" 
                class="card-img-top" 
                alt="<%= destination.image_alt || 'Destination Image' %>" 
                style="height: 500px; object-fit: cover;">
           <div class="card-body">
-            <p class="card-text text-center"><%= destination.image_alt || 'No description available.' %></p>
+            <p class="card-text text-center fst-italic"><%= destination.image_alt || 'No description available.' %></p>
             <p class="card-text"><%= destination.description || 'No description available.' %></p>
             <p class="card-text text-end">Likes: <%= destination.likes || 0 %> | Went: <%= destination.went || 0 %></p>
           </div>
@@ -28,8 +27,25 @@
             <button type="button" 
                     class="btn btn-info went-btn" 
                     style="flex: 1; max-width: 100px;"
-                    data-id="<%= destination._id %>">Went</button>
+                    data-id="<%= destination._id %>">Went</button>                                  
           </div>
+
+        <!-- embed youtube -->
+        <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+        <iframe 
+            src="https://www.youtube.com/embed/<%= destination.youtube_embed%>" 
+            style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" 
+            frameborder="0" 
+            allowfullscreen>
+        </iframe>
+        </div>
+    <br>
+    <!-- embed google map -->
+    <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+        <iframe src="https://www.google.com/maps/embed?pb=<%- destination.map_embed%>"
+        width="1200" height="600" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+        </iframe>
+        </div>
         </div>
       </div>
     </div>

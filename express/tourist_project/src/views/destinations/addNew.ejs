@@ -1,36 +1,67 @@
 <div class="container mt-5 d-flex justify-content-center">
-    <div class="col-md-4 border rounded p-4 bg-light">
+    <div class="col-md-10 border rounded p-4 bg-light">
       <h2 class="text-center">Add New Destination</h2>
 
       <form id="addDestinationForm" action="/destination/add-new" method="POST" class="needs-validation" novalidate>
         <div class="mb-3">
           <label for="name" class="form-label">Destination Name</label>
-          <input type="text" class="form-control shadow-on-focus" id="name" name="destination_name" required>
+          <input type="text" class="form-control shadow-on-focus" id="name" name="destination_name" placeholder="Ha Long Bay" required>
           <div class="invalid-feedback">
             Please enter the destination name.
           </div>
         </div>
         <div class="mb-3">
-          <label for="description" class="form-label">Description</label>
-          <textarea class="form-control shadow-on-focus" id="description" name="description" rows="3" required></textarea>
+          <label for="short_description" class="form-label">short_Description</label>
+          <textarea class="form-control shadow-on-focus" id="short_description" name="short_description" rows="3" placeholder="Địa điểm du lịch Hạ Long Quảng Ninh là một trong những điểm đến hấp dẫn bậc nhất nước ta. Với diện tích lên đến 1.553km2 bao gồm 1.969 hòn đảo đá vôi mang nhiều hình thù đẹp mắt, sinh động." required></textarea>
           <div class="invalid-feedback">
-            Please enter a description.
-          </div>
+              Please enter a description.
+            </div>
         </div>
+
         <div class="mb-3">
-          <label for="image_link" class="form-label">Image URL</label>
-          <input type="url" class="form-control shadow-on-focus" id="image_link" name="image_link" required>
+            <label for="description" class="form-label">Description</label>
+            <textarea class="form-control shadow-on-focus" id="description" name="description" rows="6" placeholder="Địa điểm du lịch Hạ Long Quảng Ninh là một trong những điểm đến hấp dẫn bậc nhất nước ta. Với diện tích lên đến 1.553km2 bao gồm 1.969 hòn đảo đá vôi mang nhiều hình thù đẹp mắt, sinh động.
+
+Du lịch Hạ Long - 1 trong 7 kỳ quan thiên nhiên thế giới, du khách sẽ được khám phá nhiều hang động độc đáo, các hòn đảo tuyệt đẹp như đảo Mắt Rồng, Ngọc Vừng, hòn Con Cóc,... Cùng với cảnh đẹp, nơi đây còn có nhiều món đặc sản thơm ngon như chả mực, sá sùng, hàu nướng, chả rươi, sam biển,...
+            
+Những trải nghiệm độc đáo và phổ biến nhất tại Hạ Long có thể kể đến như ngồi tàu ngắm vịnh Hạ Long và các hang động, bãi biển nổi tiếng; chèo kayak trên biển, ngắm Hạ Long từ trên cao bằng thuỷ phi cơ, lưu trú trên du thuyền giữa vịnh biển..." required></textarea>
+            <div class="invalid-feedback">
+              Please enter a full description.
+            </div>
+          </div>
+
+        <div class="mb-3">
+          <label for="image_link" class="form-label">Image URL Link</label>
+          <input type="url" class="form-control shadow-on-focus" id="image_link" name="image_link" placeholder="https://statics.vinwonders.com/da-lat-co-gi-choi-1_1699364025.jpg" required>
           <div class="invalid-feedback">
             Please enter a valid image URL.
           </div>
         </div>
         <div class="mb-3">
           <label for="image_alt" class="form-label">Image Alt Text</label>
-          <input type="text" class="form-control shadow-on-focus" id="image_alt" name="image_alt" required>
+          <input type="text" class="form-control shadow-on-focus" id="image_alt" name="image_alt" placeholder="Đà Lạt có gì chơi? Thành phố ngàn hoa đang chờ bạn khám phá vô vàn trải nghiệm thú vị (Ảnh: Sưu tầm)" required>
           <div class="invalid-feedback">
             Please enter the image alt text.
-          </div>
+          </div>        
         </div>
+        
+
+          <div class="mb-3">
+            <label for="map_embed" class="form-label">Embed google map</label>
+            <textarea class="form-control shadow-on-focus" id="map_embed" name="map_embed" rows="3" placeholder='<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d124928.54111687874!2d108.4507227!3d11.90391085!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x317112fef20988b1%3A0xad5f228b672bf930!2sDalat%2C%20Lam%20Dong!5e0!3m2!1sen!2s!4v1745562816277!5m2!1sen!2s" width="400" height="300" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>' required></textarea>
+            <div class="invalid-feedback">
+              Please enter link google map
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label for="youtube_embed" class="form-label">Embeded Youtube video</label>
+            <textarea class="form-control shadow-on-focus" id="youtube_embed" name="youtube_embed" rows="1" placeholder="VD: -SiENSHAg1c in youtube.com/watch?v=-SiENSHAg1c" required></textarea>
+            <div class="invalid-feedback">
+              Please enter link google map
+            </div>
+          </div>
+
         <button type="submit" class="btn btn-primary w-100">Add Destination</button>
       </form>
     </div>
