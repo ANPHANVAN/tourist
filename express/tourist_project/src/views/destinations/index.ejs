@@ -1,0 +1,38 @@
+<a href="/destination/add-new">Add New Destination</a>
+
+<div class="container mt-5">
+  <h2 class="text-center mb-4">Explore Amazing Destinations</h2>
+  <% if (destinations.length === 0) { %>
+    <p class="text-center">No destinations available.</p>
+  <% } else { %>
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+      <% destinations.forEach(destination => { %>
+        <div class="col">
+          <div class="card h-100 shadow-sm">
+            <img src="<%= destination.image_link || 'https://via.placeholder.com/300' %>" 
+                 class="card-img-top" 
+                 alt="<%= destination.image_alt || 'Destination Image' %>" 
+                 style="height: 200px; object-fit: cover;">
+            <div class="card-body">
+              <h5 class="card-title"><%= destination.destination_name || 'Unknown Destination' %></h5>
+              <p class="card-text"><%= destination.description || 'No description available.' %></p>
+            </div>
+            <div class="card-footer d-flex justify-content-center gap-2">
+              <a href="/destination/<%= destination.slug %>" 
+                 class="btn btn-primary" 
+                 style="flex: 1; max-width: 100px;">Detail</a>
+              <button type="button" 
+                      class="btn btn-success like-btn" 
+                      style="flex: 1; max-width: 100px;"
+                      data-id="<%= destination._id %>">Like</button>
+              <button type="button" 
+                      class="btn btn-info went-btn" 
+                      style="flex: 1; max-width: 100px;"
+                      data-id="<%= destination._id %>">Went</button>
+            </div>
+          </div>
+        </div>
+      <% }) %>
+    </div>
+  <% } %>
+</div>

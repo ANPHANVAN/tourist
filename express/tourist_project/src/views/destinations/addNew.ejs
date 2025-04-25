@@ -1,0 +1,58 @@
+<div class="container mt-5 d-flex justify-content-center">
+    <div class="col-md-4 border rounded p-4 bg-light">
+      <h2 class="text-center">Add New Destination</h2>
+
+      <form id="addDestinationForm" action="/destination/add-new" method="POST" class="needs-validation" novalidate>
+        <div class="mb-3">
+          <label for="name" class="form-label">Destination Name</label>
+          <input type="text" class="form-control shadow-on-focus" id="name" name="destination_name" required>
+          <div class="invalid-feedback">
+            Please enter the destination name.
+          </div>
+        </div>
+        <div class="mb-3">
+          <label for="description" class="form-label">Description</label>
+          <textarea class="form-control shadow-on-focus" id="description" name="description" rows="3" required></textarea>
+          <div class="invalid-feedback">
+            Please enter a description.
+          </div>
+        </div>
+        <div class="mb-3">
+          <label for="image_link" class="form-label">Image URL</label>
+          <input type="url" class="form-control shadow-on-focus" id="image_link" name="image_link" required>
+          <div class="invalid-feedback">
+            Please enter a valid image URL.
+          </div>
+        </div>
+        <div class="mb-3">
+          <label for="image_alt" class="form-label">Image Alt Text</label>
+          <input type="text" class="form-control shadow-on-focus" id="image_alt" name="image_alt" required>
+          <div class="invalid-feedback">
+            Please enter the image alt text.
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary w-100">Add Destination</button>
+      </form>
+    </div>
+  </div>
+  
+  <style>
+    .shadow-on-focus:focus {
+      box-shadow: 0 0 10px rgba(0, 123, 255, 0.5) !important;
+      border-color: #007bff !important;
+    }
+  </style>
+  
+  <script>
+    (function () {
+      'use strict';
+      const form = document.getElementById('addDestinationForm');
+      form.addEventListener('submit', function (event) {
+        if (!form.checkValidity()) {
+          event.preventDefault();
+          event.stopPropagation();
+        }
+        form.classList.add('was-validated');
+      }, false);
+    })();
+  </script>

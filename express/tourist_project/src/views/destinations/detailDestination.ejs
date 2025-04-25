@@ -1,0 +1,37 @@
+<a href="/destinations">Go Back Destinations</a>
+
+<div class="container mt-5">
+  <h2 class="text-center mb-4">Destination Details</h2>
+  <% if (!destination) { %>
+    <p class="text-center">No destination available.</p>
+  <% } else { %>
+    <div class="row row-cols-1 row-cols-md-1 g-4">
+      <div class="col">
+        <div class="card h-100 shadow-sm">
+          <div class="card-body">
+            <h5 class="card-title"><%= destination.destination_name || 'Unknown Destination' %></h5>
+          </div>
+          <img src="<%= destination.image_link || 'https://via.placeholder.com/300' %>" 
+               class="card-img-top" 
+               alt="<%= destination.image_alt || 'Destination Image' %>" 
+               style="height: 500px; object-fit: cover;">
+          <div class="card-body">
+            <p class="card-text text-center"><%= destination.image_alt || 'No description available.' %></p>
+            <p class="card-text"><%= destination.description || 'No description available.' %></p>
+            <p class="card-text text-end">Likes: <%= destination.likes || 0 %> | Went: <%= destination.went || 0 %></p>
+          </div>
+          <div class="card-footer d-flex justify-content-center gap-2">
+            <button type="button" 
+                    class="btn btn-success like-btn" 
+                    style="flex: 1; max-width: 100px;"
+                    data-id="<%= destination._id %>">Like</button>
+            <button type="button" 
+                    class="btn btn-info went-btn" 
+                    style="flex: 1; max-width: 100px;"
+                    data-id="<%= destination._id %>">Went</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% } %>
+</div>
