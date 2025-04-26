@@ -1,7 +1,8 @@
+const JWT_SECRET = process.env.JWT_SECRET
 const User  = require('../models/userModel');
 const jwt = require('jsonwebtoken')
-const JWT_SECRET = process.env.JWT_SECRET
 const UserMongo = require('../models/userMongoModel');
+const {pushlishUserEvent} = require('../services/queueRabbitService')
 
 class SiteController {
     async index(req,res,next){
@@ -45,12 +46,21 @@ class SiteController {
     async registerNew(req,res,next){
         try {
             let registerInformation = req.body
-            console.log(registerInformation)
+
             let result = await User.findByUsername(registerInformation.username)
             if (result.rows.length>0) {
                 res.render('sites/apology', {message: `Username already exists`});
             } else {
-                User.create(registerInformation.fullName, registerInformation.username, registerInformation.email, registerInformation.password)
+                await User.create(registerInformation.fullName, registerInformation.username, registerInformation.email, registerInformation.password)
+                
+                let user = await User.findByUsername(registerInformation.username)
+                let resgisterInformationMongo = {
+                    user_id: user.rows[0].id,
+                    username: user.rows[0].username,
+                    email: user.rows[0].email,
+                    fullname: user.rows[0].fullname
+                }
+                await pushlishUserEvent(resgisterInformationMongo, 'create')
                 res.redirect('/login');
             }
 

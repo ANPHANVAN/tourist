@@ -17,6 +17,9 @@ postgre.connect()
 const redis = require('./config/db/redis');
 redis.connect()
 
+const rabbitmq = require('./config/rabbitmq');
+rabbitmq.connectRabbitMQ()
+
 app = express();
 const port = 3000;
 

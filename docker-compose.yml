@@ -1,4 +1,48 @@
 services:
+
+  consumer:
+    build:
+      context: ./consumer
+      dockerfile: Dockerfile
+    container_name: tourist-consumer-1
+    networks:
+      - app-network
+    depends_on:
+      - rabbitmq
+      - mongodb
+    volumes:
+      - ./consumer:/tourist_project
+    environment:
+      - POSTGRES_HOST=${POSTGRES_HOST}
+      - POSTGRES_PORT=${POSTGRES_PORT}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+      - MONGO_LINK=${MONGO_LINK}
+      - REDIS_LINK=${REDIS_LINK}
+      - RABBIT_LINK_CONNECT=${RABBIT_LINK_CONNECT}
+      
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: tourist-rabbitmq-1
+    ports:
+      - "15672:15672" # RabbitMQ management UI
+      - "5672:5672"   # RabbitMQ AMQP protocol
+    networks:
+      - app-network
+
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq
+    expose:
+      - "5672"
+    environment:
+      - RABBIT_LINK_CONNECT=${RABBITMQ_LINK_CONNECT}
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
   postgres:
     image: postgres:15
     environment:
@@ -77,6 +121,7 @@ services:
       - REDIS_LINK=${REDIS_LINK}
       - HASH_SALT=${HASH_SALT}
       - JWT_SECRET=${JWT_SECRET}
+      - RABBIT_LINK_CONNECT=${RABBIT_LINK_CONNECT}
     expose:
       - "3000"
     volumes:
@@ -180,3 +225,4 @@ volumes:
   postgres-data:
   mongo-data:
   redis-data:
+  rabbitmq-data:
