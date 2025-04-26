@@ -11,6 +11,7 @@ router.get('/login', siteController.login)
 router.get('/logout', siteController.logout)
 
 router.post('/login/authencation', siteController.authencation)
+
 // [POST] /register-new
 router.post('/register-new', siteController.registerNew)
 

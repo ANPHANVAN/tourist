@@ -1,6 +1,7 @@
 const User  = require('../models/userModel');
 const jwt = require('jsonwebtoken')
 const JWT_SECRET = process.env.JWT_SECRET
+const UserMongo = require('../models/userMongoModel');
 
 class SiteController {
     async index(req,res,next){

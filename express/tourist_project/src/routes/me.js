@@ -1,13 +1,17 @@
 const express = require('express');
 const router = express.Router();
 
-const siteController = require('../controllers/SiteController');
-const { query } = require('../config/db/postgres');
-const route = require('.');
-// [GET] /
-router.get('/health', (req, res) => {
-    res.status(200).send('OK');
-});
-router.use('/', siteController.index)
+const meController = require('../controllers/MeController');
+const authMiddleware = require('../middleware/authMiddleware')
+
+// GET /me/api/
+router.use('/api/:id', meController.apiMe)
+
+// GET /me/:id
+router.get('/:id', meController.me)
+
+// GET /me
+router.use('/', meController.index)
+
 
 module.exports = router;
