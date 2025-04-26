@@ -23,20 +23,21 @@ services:
       - RABBIT_LINK_CONNECT=${RABBIT_LINK_CONNECT}
       
   rabbitmq:
-    image: rabbitmq:3-management
+    image: rabbitmq:3-management-alpine
     container_name: tourist-rabbitmq-1
     ports:
       - "15672:15672" # RabbitMQ management UI
       - "5672:5672"   # RabbitMQ AMQP protocol
     networks:
       - app-network
-
     volumes:
       - rabbitmq-data:/var/lib/rabbitmq
     expose:
       - "5672"
     environment:
-      - RABBIT_LINK_CONNECT=${RABBITMQ_LINK_CONNECT}
+      - RABBIT_LINK_CONNECT=${RABBIT_LINK_CONNECT}
+      - RABBITMQ_DEFAULT_USER=${RABBITMQ_DEFAULT_USER}
+      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_DEFAULT_PASS}
     healthcheck:
       test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
       interval: 10s
