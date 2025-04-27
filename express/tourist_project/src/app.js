@@ -30,7 +30,7 @@ app.use(session); // Thêm express-session
 
 app.set('view engine' , 'ejs');
 app.set('views', 'src/views');
-app.set('layout', 'layouts/main'); // Đảm bảo layout chính được chỉ định
+app.set('layout', './partials/layout'); // Đảm bảo layout chính được chỉ định
 app.use(expressLayouts);
 app.use(cookieParser());
 
