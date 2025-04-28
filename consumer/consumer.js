@@ -32,8 +32,8 @@ async function startConsumer(){
                             email: user.email, 
                             fullname:user.fullname, 
                             deleted: false,
-                            created_at: Date.now(),
-                            updatedAt: Date.now()} 
+                            created_at: new Date(),
+                            updatedAt: new Date()} 
                         },
                         { upsert: true }
                     )
