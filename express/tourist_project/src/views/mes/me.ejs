@@ -1,47 +1,74 @@
 <div class="container-fluid p-0">
-    <!-- Ảnh bìa -->
-    <div class="position-relative">
+  <!-- Ảnh bìa -->
+  <div class="position-relative">
+    <img src="https://upload.wikimedia.org/wikipedia/en/8/86/Avatar_Aang.png" 
+          alt="Cover Photo" 
+          class="img-fluid w-100" 
+          style="height: 300px; object-fit: cover;">
+    <!-- Ảnh đại diện -->
+    <div class="position-absolute" style="bottom: -50px; left: 20px;">
       <img src="https://upload.wikimedia.org/wikipedia/en/8/86/Avatar_Aang.png" 
-           alt="Cover Photo" 
-           class="img-fluid w-100" 
-           style="height: 300px; object-fit: cover;">
-      <!-- Ảnh đại diện -->
-      <div class="position-absolute" style="bottom: -50px; left: 20px;">
-        <img src="https://upload.wikimedia.org/wikipedia/en/8/86/Avatar_Aang.png" 
-             alt="Profile Picture" 
-             class="rounded-circle border border-white" 
-             style="width: 150px; height: 150px; object-fit: cover;">
-      </div>
+            alt="Profile Picture" 
+            class="rounded-circle border border-white" 
+            style="width: 150px; height: 150px; object-fit: cover;">
     </div>
+  </div>
   
-    <!-- Thông tin cá nhân -->
-    <div class="container mt-5 pt-4">
-      <div class="row">
-        <div class="col-md-4">
-          <h2 class="mb-2"><%= 'Unknown User' %></h2>
-          <p class="text-muted mb-3"><%= 'No bio available.' %></p>
-          <a href="/me/edit/" class="btn btn-primary mb-3">Edit Profile</a>
-        </div>
-        <div class="col-md-8">
-          <!-- Form đăng bài -->
-          <div class="card mb-4">
-            <div class="card-body">
-              <form action="/posts" method="POST" enctype="multipart/form-data">
-                <textarea name="content" 
-                          class="form-control mb-2" 
-                          rows="3" 
-                          placeholder="Share your travel story..." 
-                          required></textarea>
-                <input type="file" name="images" class="form-control mb-2" accept="image/*" multiple>
-                <button type="submit" class="btn btn-success w-100">Post</button>
-              </form>
-            </div>
+  <!-- Thông tin cá nhân -->
+  <div class="container mt-5 pt-4">
+    <div class="row">
+      <div class="col-md-4">
+        <h2 class="mb-2"><%= user.username %></h2>
+        <p class="text-muted mb-3"><%= 'No bio available.' %></p>
+        <a href="/me/edit/" class="btn btn-primary mb-3">Edit Profile</a>
+      </div>
+      <div class="col-md-8">
+        <!-- Form đăng bài -->
+        <div class="card mb-4">
+          <div class="card-body">
+            <!-- enctype="multipart/form-data" --> 
+            <form action="/me/posts" method="POST">
+              <textarea name="content" 
+                        class="form-control mb-2" 
+                        rows="3" 
+                        placeholder="Share your travel story..." 
+                        required></textarea>
+              <!-- <inp ut type="text" name="location" class="form-control mb-2" placeholder="Location" required> -->
+              <select class="form-select" id="location" name="location" required>
+                <option value="" disabled selected>-- Choose a location --</option>
+                <option value="hanoi">Hà Nội</option>
+                <option value="hochiminh">Hồ Chí Minh</option>
+              </select>
+              <!-- <input type="file" name="images" class="form-control mb-2" accept="image/*" multiple> -->
+              <button type="submit" class="btn btn-success w-100">Post</button>
+            </form>
+
           </div>
-  
         </div>
+  
+          <!-- Danh sách bài đăng -->
+        <h3 class="mb-3">Travel Posts</h3>
+        <% if (posts.length === 0) { %>
+          <p class="text-muted">No posts available. Start sharing your travel stories!</p>
+        <% } else { %>
+          <% posts.forEach(post => { %>
+            <div class="card mb-3">
+              <div class="card-body">
+                <div class="d-flex align-items-center mb-2">
+                  <div>
+                    <h6 class="mb-0"><%= user.username %></h6>
+                    <small class="text-muted"><%= post.createdAt.toLocaleDateString() %></small>
+                  </div>
+                </div>
+                <p class="card-text"><%= post.content %></p>
+              </div>
+            </div>
+          <% }) %>
+        <% } %>
       </div>
     </div>
   </div>
+</div>
   
   <style>
     /* Tùy chỉnh giao diện */
@@ -53,15 +80,3 @@
       border-color: #007bff;
     }
   </style>
-
-  {
-    user: {
-        id: '12345',
-        user: 'Unknown User',
-        name: 'Unknown User',
-        bio: 'No bio available.',
-        profilePicture: 'https://upload.wikimedia.org/wikipedia/en/8/86/Avatar_Aang.png',
-        coverPhoto: 'https://upload.wikimedia.org/wikipedia/en/8/86/Avatar_Aang.png'
-
-    }
-  }

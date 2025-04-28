@@ -1,22 +1,40 @@
+const Post = require('../models/postModel');
 
 class MeController {
     // GET /me
-    index(req, res) {
-        res.send('me');
+    async index(req, res) {
+        const user_id = req.user.id
+        res.redirect(`/me/${user_id}`)
     }
 
     // GET /me/:id
-    me(req,res,next){
-        res.render('mes/me')
+    async me(req,res,next){
+        const user = req.user
+        const mePosts = await Post.find({user_id: user.id})
+        res.render('mes/me', {posts: mePosts, user: user})
     }
 
     // GET /me/api/:id
-    apiMe(req, res, next){
+    async apiMe(req, res, next){
         const id = req.params.id
         res.json({
             id: id,
             name: 'me'
         })
+    }
+
+    // POST /me/posts
+    async posts(req, res, next){
+        try {
+            // const user_id = req.user.id
+            let post = req.body
+            post.user_id = req.user.id
+            await Post.create(post)
+            res.redirect('/me')
+        } catch (error) {
+            console.log(error);
+            res.status(500).json({ error: 'Internal Server Error' });
+        }
     }
 
 }

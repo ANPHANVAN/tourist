@@ -71,7 +71,7 @@ class SiteController {
     }
 
     // [POST] /login/authencation
-    async authencation(req,res,next) {
+    async authentication(req,res,next) {
         try {
             let loginInformation = req.body
             let result = await User.findByUsername(loginInformation.username)

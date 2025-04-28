@@ -1,6 +1,23 @@
 const mongoose = require('mongoose')
 const mongooseDelete = require('mongoose-delete');
 
+// Định nghĩa sub-schema cho comments
+const CommentSchema = new mongoose.Schema({
+    user_id: {
+        type: String,
+        ref: 'User',
+        required: true // Bắt buộc có user_id
+    },
+    content: {
+        type: String,
+        required: true // Bắt buộc có content
+    },
+    created_at: {
+        type: Date,
+        default: Date.now // Tự động gán thời gian hiện tại
+    }
+});
+
 const PostSchema = new mongoose.Schema({
     user_id: {
         type: String,
@@ -10,49 +27,33 @@ const PostSchema = new mongoose.Schema({
         type: String,
         required: true
     }, 
-    content: {
-        type: [String],
-        required: true
-    },
     images: {
         type: [String],
-        required: true
+        default: []
     },
     likes: {
         type: [String],
-        required: true
+        default: []
     },
     comments: {
-        type: [{
-            user_id: String,
-            content: String,
-            created_at: Date
-        }],
-        required: true
+        type: [CommentSchema], // Sử dụng sub-schema
+        default: []
     },
-    slug_destinaiton: { 
+    slug_destination: { // Sửa lỗi chính tả
         type: String,
-        required: true
-    },
-    created_at: {
-        type: Date,
-        default: Date.now
-    },
-    updated_at: {
-        type: Date,
-        default: Date.now
     },
     deleted: {
         type: Boolean,
         default: false
     }
-})
+}, {
+    timestamps: true 
+});
 
 PostSchema.plugin(mongooseDelete, {
     deletedAt: true,
     overrideMethods: 'all'
 });
 
-const Post =  mongoose.model('Post', PostSchema)
 
-module.exports = Post
+module.exports = mongoose.model('Post', PostSchema);
