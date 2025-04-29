@@ -27,12 +27,9 @@ const UserMongoSchema = new mongoose.Schema({
         type: String,
         
     },
-    introduce: {
-        type: {
-            bio: String,
-            catalogue: Array,
-        },
-        
+    bio: {
+        type: String,
+        default: 'Hello, I am a new user'
     },
 
     deleted: {

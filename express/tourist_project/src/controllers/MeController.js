@@ -14,14 +14,30 @@ class MeController {
         res.render('mes/me', { user: user })
     }
 
-    // GET /me/api/:id
-    async apiMe(req, res, next){
-        const id = req.params.id
-        res.json({
-            id: id,
-            name: 'me'
-        })
+    // GET /me/:id/edit
+    async meGetEdit(req,res,next){
+
+        res.render('mes/editUser')
     }
+
+    // GET /me/api/:id/edit
+    async meGetEditApi(req,res,next){
+        const user = await UserMongo.findOne({_id: req.user.ObjectId})
+        res.json(user)
+    }
+
+    // POST /me/api/:id/edit
+    async mePostEdit(req,res,next){
+        const updatedUser = await UserMongo.findOneAndUpdate(
+            { _id: req.user.ObjectId },
+            { $set: req.body },     // chỉ update các trường có trong req.body
+            { new: true }           // trả về document đã được cập nhật
+          );
+          
+        res.redirect('/me')
+        // res.redirect(`/me/${req.params.id}`)
+    }
+
 
     // POST /me/posts
     async posts(req, res, next){
