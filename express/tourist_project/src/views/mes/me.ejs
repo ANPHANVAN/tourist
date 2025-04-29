@@ -18,7 +18,7 @@
   <div class="container mt-5 pt-4">
     <div class="row">
       <div class="col-md-4">
-        <h2 class="mb-2"><%= user.username %></h2>
+        <h2 class="mb-2"><%= user.fullname %></h2>
         <p class="text-muted mb-3"><%= 'No bio available.' %></p>
         <a href="/me/edit/" class="btn btn-primary mb-3">Edit Profile</a>
       </div>
@@ -59,7 +59,7 @@
         </div>
         <script>
           // Gọi hàm fetchPosts khi trang được tải
-          document.addEventListener('DOMContentLoaded', ()=> fetchPosts('<%= user_id %>'));
+          document.addEventListener('DOMContentLoaded', ()=> fetchPosts('<%= user._id %>'));
         </script>
       </div>
     </div>

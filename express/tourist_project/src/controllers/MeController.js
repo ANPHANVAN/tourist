@@ -1,16 +1,17 @@
 const Post = require('../models/postModel');
-
+const UserMongo = require('../models/userMongoModel');
 class MeController {
     // GET /me
     async index(req, res) {
-        const user_id = req.user.id
+        const user_id = req.user.ObjectId
         res.redirect(`/me/${user_id}`)
     }
 
     // GET /me/:id
     async me(req,res,next){
-        const user = req.user
-        res.render('mes/me', { user: user, user_id: user.ObjectId })
+        const user_id = req.params.id
+        let user = await UserMongo.findOne({_id: user_id})
+        res.render('mes/me', { user: user })
     }
 
     // GET /me/api/:id
