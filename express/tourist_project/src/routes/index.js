@@ -15,7 +15,7 @@ function route(app){
     app.use('/explore', exploreRouter)
     app.use('/experience', experienceRouter)
     app.use('/me', authMiddleware, meRouter)
-    app.use('/api', apiRouter)
+    app.use('/api', authMiddleware, apiRouter)
     app.use('/', indexRouter)
 }
 

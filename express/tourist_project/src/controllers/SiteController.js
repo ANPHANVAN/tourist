@@ -82,7 +82,9 @@ class SiteController {
             } else if (isMatch == false) {
                 res.render('sites/apology', {message: `Password is incorrect`});
             } else {
-                const token = jwt.sign({id: result.rows[0].id, username: result.rows[0].username}, JWT_SECRET, {expiresIn: '24h'});
+                const userMongo = await UserMongo.findOne({user_id: result.rows[0].id})
+                const ObjectId = userMongo._id.toString()
+                const token = jwt.sign({id: result.rows[0].id, ObjectId: ObjectId}, JWT_SECRET, {expiresIn: '24h'});
     
                 res.cookie('token', token, {httpOnly: true, secure: true, maxAge: 3600000});
                 res.redirect('/');

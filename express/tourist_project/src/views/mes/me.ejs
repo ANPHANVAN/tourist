@@ -34,11 +34,11 @@
                         placeholder="Share your travel story..." 
                         required></textarea>
               <!-- <inp ut type="text" name="location" class="form-control mb-2" placeholder="Location" required> -->
-              <select class="form-select" id="location" name="location" required>
+              <!-- <select class="form-select" id="location" name="location" required>
                 <option value="" disabled selected>-- Choose a location --</option>
                 <option value="hanoi">Hà Nội</option>
                 <option value="hochiminh">Hồ Chí Minh</option>
-              </select>
+              </select> -->
               <!-- <input type="file" name="images" class="form-control mb-2" accept="image/*" multiple> -->
               <button type="submit" class="btn btn-success w-100">Post</button>
             </form>
@@ -47,24 +47,20 @@
         </div>
   
           <!-- Danh sách bài đăng -->
-        <h3 class="mb-3">Travel Posts</h3>
-        <% if (posts.length === 0) { %>
-          <p class="text-muted">No posts available. Start sharing your travel stories!</p>
-        <% } else { %>
-          <% posts.forEach(post => { %>
-            <div class="card mb-3">
-              <div class="card-body">
-                <div class="d-flex align-items-center mb-2">
-                  <div>
-                    <h6 class="mb-0"><%= user.username %></h6>
-                    <small class="text-muted"><%= post.createdAt.toLocaleDateString() %></small>
-                  </div>
-                </div>
-                <p class="card-text"><%= post.content %></p>
-              </div>
+        <div class="container mt-5">
+          <h2 class="text-center mb-5 fw-bold text-primary">My Travel Posts</h2>
+      
+          <!-- Danh sách bài đăng -->
+          <div class="row justify-content-center">
+            <div class="col-md-8" id="postsContainer">
+              <!-- Bài đăng sẽ được render động ở đây -->
             </div>
-          <% }) %>
-        <% } %>
+          </div>
+        </div>
+        <script>
+          // Gọi hàm fetchPosts khi trang được tải
+          document.addEventListener('DOMContentLoaded', ()=> fetchPosts('<%= user_id %>'));
+        </script>
       </div>
     </div>
   </div>

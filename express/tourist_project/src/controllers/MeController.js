@@ -10,8 +10,7 @@ class MeController {
     // GET /me/:id
     async me(req,res,next){
         const user = req.user
-        const mePosts = await Post.find({user_id: user.id})
-        res.render('mes/me', {posts: mePosts, user: user})
+        res.render('mes/me', { user: user, user_id: user.ObjectId })
     }
 
     // GET /me/api/:id
@@ -29,6 +28,7 @@ class MeController {
             // const user_id = req.user.id
             let post = req.body
             post.user_id = req.user.id
+            post.user = req.user.ObjectId
             await Post.create(post)
             res.redirect('/me')
         } catch (error) {

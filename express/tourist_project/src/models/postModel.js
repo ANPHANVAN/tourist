@@ -1,27 +1,33 @@
 const mongoose = require('mongoose')
 const mongooseDelete = require('mongoose-delete');
+const User = require('./userMongoModel')
 
 // Định nghĩa sub-schema cho comments
 const CommentSchema = new mongoose.Schema({
-    user_id: {
-        type: String,
+    user: {
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
         required: true // Bắt buộc có user_id
     },
+
     content: {
         type: String,
         required: true // Bắt buộc có content
     },
-    created_at: {
-        type: Date,
-        default: Date.now // Tự động gán thời gian hiện tại
-    }
+}, 
+{
+    timestamps: true 
 });
 
 const PostSchema = new mongoose.Schema({
     user_id: {
-        type: String,
+        type: Number,
         required: true
+    },
+    user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: true // Bắt buộc có user
     },
     content: {
         type: String,
@@ -32,8 +38,8 @@ const PostSchema = new mongoose.Schema({
         default: []
     },
     likes: {
-        type: [String],
-        default: []
+        type: Number,
+        default: 0
     },
     comments: {
         type: [CommentSchema], // Sử dụng sub-schema
