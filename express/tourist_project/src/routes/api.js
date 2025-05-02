@@ -15,7 +15,12 @@ router.get('/post/user-post/:id', apiController.apiUserPost)
 // GET /api/users/:id
 router.get('/users/:id', apiController.apiOneUser)
 
-// POST /api/posts/${postId}/comment
+// POST /api/posts/:postId/comment
 router.post('/posts/:postId/comment', apiController.apiPostComment)
+
+// multi POST/PUT /api/posts/:postId/like  add user like to post / unlike and remove user like
+router.post('/posts/:postId/like', apiController.apiPostPOSTLike)
+
+
 
 module.exports = router

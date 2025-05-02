@@ -19,6 +19,7 @@ const CommentSchema = new mongoose.Schema({
     timestamps: true 
 });
 
+
 const PostSchema = new mongoose.Schema({
     user_id: {
         type: Number,
@@ -40,6 +41,11 @@ const PostSchema = new mongoose.Schema({
     likes: {
         type: Number,
         default: 0
+    },
+    like_user: {
+        type: [mongoose.Schema.Types.ObjectId],
+        ref: 'User',
+        default: []
     },
     comments: {
         type: [CommentSchema], // Sử dụng sub-schema

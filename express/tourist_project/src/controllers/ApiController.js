@@ -77,6 +77,43 @@ class ApiController {
             res.status(500).json({ error: 'Internal Server Error' });
         }
     }
+
+    // POST /api/posts/:postId/like  add user like to post
+    async apiPostPOSTLike(req, res) {
+        try {
+        const postId = req.params.postId;
+        const userId = req.user.ObjectId;
+    
+        const post = await Post.findById(postId);
+        if (!post) return res.status(404).json({ error: 'Post not found' });
+    
+        const hasLiked = post.like_user.includes(userId);
+        
+        if (hasLiked) {
+            // Nếu đã like → unlike (gỡ user khỏi mảng like_user)
+            await Post.updateOne(
+            { _id: postId },
+            {   $pull: { like_user: userId },
+                $inc: { likes: -1 }
+            }
+            );
+            return res.json({ message: 'Unliked' });
+        } else {
+            // Nếu chưa like → like (thêm userId vào mảng)
+            await Post.updateOne(
+            { _id: postId },
+            { $addToSet: { like_user: userId },
+                $inc: {likes: +1} } 
+            );
+            return res.json({ message: 'Liked' });
+        }
+    
+        } catch (error) {
+        console.error('Error toggling like:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+        }
+    }
+  
 }
 
 

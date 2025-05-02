@@ -88,10 +88,19 @@
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
           });
+          console.log('Like response:', response);
           if (response.ok) {
-            likeCount++;
-            likeCountSpan.textContent = likeCount;
-            e.target.classList.add('liked');
+            const data = await response.json();
+            console.log('Like response data:', data);
+            if (data.message === 'Unliked') {
+              likeCount--;
+              likeCountSpan.textContent = likeCount;
+              e.target.classList.remove('liked');
+            } else {
+              likeCount++;
+              likeCountSpan.textContent = likeCount;
+              e.target.classList.add('liked');
+            }
           } else {
             alert('Failed to like this post.');
           }
