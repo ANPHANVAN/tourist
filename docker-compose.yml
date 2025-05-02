@@ -7,9 +7,6 @@ services:
     container_name: tourist-consumer-1
     networks:
       - app-network
-    depends_on:
-      - rabbitmq
-      - mongodb
     volumes:
       - ./consumer:/tourist_project
     environment:
@@ -21,6 +18,18 @@ services:
       - MONGO_LINK=${MONGO_LINK}
       - REDIS_LINK=${REDIS_LINK}
       - RABBIT_LINK_CONNECT=${RABBIT_LINK_CONNECT}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      mongodb:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
       
   rabbitmq:
     image: rabbitmq:3-management-alpine
