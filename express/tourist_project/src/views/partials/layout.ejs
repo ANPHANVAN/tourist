@@ -24,8 +24,10 @@
   </main>
 
   <!-- Footer -->
-  <%- include('../partials/footer') %>
-
+  <% if (!hideFooter) { %>
+    <%- include('../partials/footer') %>
+  <% } %>
+    
   <!-- Kết nối Socket.IO (nếu cần) -->
   <!-- <script>
     const socket = io('http://localhost:3000'); // Thay bằng URL của Socket.IO server nếu khác

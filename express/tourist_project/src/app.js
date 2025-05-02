@@ -9,6 +9,7 @@ const session = require('./config/session');
 require('dotenv').config();
 
 // import from my file
+const hideFooter = require('./middleware/hideFooter');
 const route = require('./routes');
 const mongodb = require('./config/db/mongodb');
 mongodb.connect()
@@ -25,12 +26,11 @@ rabbitmq.connectRabbitMQ()
 app = express();
 const port = 3000;
 
-
 app.use(morgan('combined'));
 app.use(express.json());        // Đọc body dạng JSON
 app.use(express.urlencoded({ extended: true }));  // Đọc form (x-www-form-urlencoded)
 app.use(session); // Thêm express-session
-
+app.use(hideFooter); // Thư mục chứa file tĩnh
 
 app.set('view engine' , 'ejs');
 app.set('views', 'src/views');
