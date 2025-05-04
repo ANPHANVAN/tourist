@@ -3,28 +3,32 @@ const express = require('express');
 const morgan = require('morgan');
 const expressLayouts = require('express-ejs-layouts');
 const cookieParser = require('cookie-parser');
+const http = require('http');
+const { Server } = require('socket.io');
+
 const session = require('./config/session');
 // const multer = require('multer');
 // const upload = multer({ dest: 'uploads/' });
 require('dotenv').config();
 
 // import from my file
-const hideFooter = require('./middleware/hideFooter');
 const route = require('./routes');
 const mongodb = require('./config/db/mongodb');
 mongodb.connect()
-
 const postgre = require('./config/db/postgres');
 postgre.connect()
-
 const redis = require('./config/db/redis');
 redis.connect()
-
 const rabbitmq = require('./config/rabbitmq');
 rabbitmq.connectRabbitMQ()
 
+const hideFooter = require('./middleware/hideFooter');
+const initSocket = require('./services/socket');
 app = express();
 const port = 3000;
+const server = http.createServer(app)
+const io = new Server(server)
+initSocket(io)
 
 app.use(morgan('combined'));
 app.use(express.json());        // Đọc body dạng JSON
@@ -40,6 +44,6 @@ app.use(cookieParser());
 
 route(app);
 
-app.listen(port, () => {
+server.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);
 });

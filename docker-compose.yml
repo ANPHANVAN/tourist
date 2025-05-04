@@ -132,6 +132,7 @@ services:
       - HASH_SALT=${HASH_SALT}
       - JWT_SECRET=${JWT_SECRET}
       - RABBIT_LINK_CONNECT=${RABBIT_LINK_CONNECT}
+      - FINAL_HOST=${FINAL_HOST}
     expose:
       - "3000"
     volumes:
