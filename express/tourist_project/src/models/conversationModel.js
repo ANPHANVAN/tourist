@@ -1,6 +1,9 @@
 const mongoose = require('mongoose')
 
 const ConversationSchema = new mongoose.Schema({
+    name_conversation: {
+        type: String,
+    },
     user: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
@@ -9,10 +12,10 @@ const ConversationSchema = new mongoose.Schema({
     lastMessage: {
         type: String,
     },
-    message: [{
+    message: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Message',
-    }]
+    }
 
 },{timestamps: true})
 
