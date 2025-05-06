@@ -15,6 +15,9 @@ router.get('/post/user-post/:id', apiController.apiUserPost)
 // GET /api/users/:id
 router.get('/users/:id', apiController.apiOneUser)
 
+// GET /api/user-current  take user current
+router.get('/user-current', apiController.apiUserCurrent)
+
 // POST /api/posts/:postId/comment
 router.post('/posts/:postId/comment', apiController.apiPostComment)
 

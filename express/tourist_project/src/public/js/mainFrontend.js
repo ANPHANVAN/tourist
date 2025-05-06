@@ -9,3 +9,10 @@ async function fetchUserData(userId) {
         return user;
     }
 }
+    
+document.addEventListener('DOMContentLoaded', async () => {
+    const respose = await fetch('/api/user-current')
+    const { user } = await respose.json()
+    const profileUser = document.querySelector('#profile-user')
+    profileUser.innerHTML = `${user.fullname || "Profile"}`
+})

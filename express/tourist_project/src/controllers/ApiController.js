@@ -51,6 +51,17 @@ class ApiController {
             res.status(500).json({ error: 'Internal Server Error' });
         }
     }
+    // GET /api/user-current  take user current
+    async apiUserCurrent(req, res) {
+        try {
+            const userId = req.user.ObjectId
+            let user = await UserMongo.findOne({_id: userId})
+            res.json({user})
+        } catch (error) {
+            console.error('Error fetching current user:', error);
+            res.status(500).json({ error: 'Internal Server Error' });
+        }
+    }
 
     // POST /api/posts/:postId/comment
     async apiPostComment(req, res) {
