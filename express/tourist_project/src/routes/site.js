@@ -10,7 +10,7 @@ router.get('/login', siteController.login)
 // [GET] /logout
 router.get('/logout', siteController.logout)
 
-router.post('/login/authencation', siteController.authentication)
+router.post('/login/authentication', siteController.authentication)
 
 // [POST] /register-new
 router.post('/register-new', siteController.registerNew)

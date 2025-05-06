@@ -70,7 +70,7 @@ class SiteController {
         }
     }
 
-    // [POST] /login/authencation
+    // [POST] /login/authentication
     async authentication(req,res,next) {
         try {
             let loginInformation = req.body
