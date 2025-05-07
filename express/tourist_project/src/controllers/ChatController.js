@@ -34,7 +34,7 @@ class ChatController {
     async getAllConversations(req,res) {
         try {
             const allConversation = await Conversation.find({ user: req.user.ObjectId })
-            .populate('user', 'fullname avatar') // populate user trong conversation
+            .populate('user', 'fullname avatar  online_status') // populate user trong conversation
             .populate({
                 path: 'message',
                 select: 'sender text updatedAt',

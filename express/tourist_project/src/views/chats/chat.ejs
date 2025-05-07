@@ -134,7 +134,19 @@ body {
 </div>
 
 <script>
-const socket = io('<%=FINAL_HOST%>');
+    // DOM Elements
+    const conversationList = document.getElementById('conversationList');
+    const chatMessages = document.getElementById('chatMessages');
+    const chatName = document.getElementById('chatName');
+    const chatAvatar = document.getElementById('chatAvatar');
+    const chatStatus = document.getElementById('chatStatus');
+    const messageInput = document.getElementById('messageInput');
+    const sendBtn = document.getElementById('sendBtn');
+    const allUsers = document.getElementById('allUsers');
+    const loading = document.getElementById('loading');
+
+
+    const socket = io('<%=FINAL_HOST%>');
 let selectedConversationId = null;
 let currentUserId = `<%= UserId %>`;
 let currentMessages = null
@@ -145,16 +157,6 @@ socket.on('connect', () => {
     socket.emit('sendUserInfo', { userId: currentUserId });
 });
 
-// DOM Elements
-const conversationList = document.getElementById('conversationList');
-const chatMessages = document.getElementById('chatMessages');
-const chatName = document.getElementById('chatName');
-const chatAvatar = document.getElementById('chatAvatar');
-const chatStatus = document.getElementById('chatStatus');
-const messageInput = document.getElementById('messageInput');
-const sendBtn = document.getElementById('sendBtn');
-const allUsers = document.getElementById('allUsers');
-const loading = document.getElementById('loading');
 
 // Show loading
 function showLoading(show) {
@@ -229,7 +231,11 @@ async function selectConversation(conversationId, otherUser) {
     selectedConversationId = conversationId;
     chatName.textContent = otherUser.fullname;
     chatAvatar.src = otherUser.avatar;
-    chatStatus.textContent = 'Active now';
+    if (otherUser.online_status) {
+        chatStatus.innerHTML = `<i class="bi bi-circle-fill text-success"></i>  Online`;
+    } else {
+        chatStatus.innerHTML = `<i class="bi bi-circle"></i></i>  Offline`;
+    }
     try {
     const response = await fetch(`/chat/api/get-message/${conversationId}`);
     const messages = await response.json();
@@ -242,7 +248,6 @@ async function selectConversation(conversationId, otherUser) {
 
 
 async function buttonNavigation(otherUserId) {
-    console.log('go in buttonNavigation')
     let matchedConversation = null;
     let users = [currentUserId, otherUserId].sort()
     const conversationsResponse = await fetch('/chat/api/get-all-conversation');
