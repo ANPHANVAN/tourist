@@ -45,6 +45,10 @@ const UserMongoSchema = new mongoose.Schema({
         type: Date,
         default: Date.now,
     },
+    online_status: {
+        type: Boolean,
+        default: false,
+      }
 })
 
 UserMongoSchema.plugin(mongooseDelete, {

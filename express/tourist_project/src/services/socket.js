@@ -3,21 +3,18 @@ module.exports = (io) => {
   let onlineUsers = [];
   const Message = require('../models/messageModel');
   const Conversation = require('../models/conversationModel');
+  const UserMongo = require('../models/userMongoModel');
 
-  io.on('connection', (socket) => {
+  io.on('connection', async (socket) => {
 
-    socket.on('sendUserInfo', (data) => {
+    socket.on('sendUserInfo', async (data) => {
       const { userId } = data;
       try {
         socket.userId = userId;
+        await UserMongo.updateOne({ _id: userId }, { $set: { online_status: true } })
         console.log('UserId connected:', socket.userId);
-  
-        // onlineUsers.push({ id: socket.userId, socketId: socket.id, username: socket.username });
-        // io.emit('updateAllUsers', onlineUsers.map(u => ({
-        //   id: u.id,
-        //   name: u.username,
-        //   avatar: `https://via.placeholder.com/30?text=${u.id}`,
-        // })));
+        let allUsers = await UserMongo.find({})
+        io.emit('updateAllUsers',(allUsers));
 
       } catch (error) {
         console.error('JWT authentication failed:', error);
@@ -68,13 +65,10 @@ module.exports = (io) => {
     })
   
     // Xử lý disconnect
-    socket.on('disconnect', () => {
-      onlineUsers = onlineUsers.filter(u => u.socketId !== socket.id);
-      io.emit('updateAllUsers', onlineUsers.map(u => ({
-        id: u.id,
-        name: u.username,
-        avatar: `https://via.placeholder.com/30?text=${u.id}`,
-      })));
+    socket.on('disconnect', async () => {
+      await UserMongo.updateOne({ _id: socket.userId }, { $set: { online_status: false } })
+      let allUsers = await UserMongo.find({})
+      io.emit('updateAllUsers',(allUsers));
     });
   });
 }
