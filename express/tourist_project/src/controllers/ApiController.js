@@ -7,7 +7,7 @@ class ApiController {
     // GET /api/user/all-user
     async apiAllUser(req, res) {
         try {
-            let allUser = await UserMongo.find({})
+            let allUser = await UserMongo.find({}).sort({ online_status: -1 });
             res.json({users: allUser})
         } catch (error) {
             console.error('Error fetching all users:', error);
