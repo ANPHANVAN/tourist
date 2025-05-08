@@ -28,3 +28,14 @@ async function fetchOneUser(userId) {
     console.error('Error fetching users:', error);
     }
 }
+
+// Fetch All Users
+async function fetchAllUser() {
+    try {
+    const response = await fetch(`/api/user/all-user`);
+    const allUser = await response.json();
+    return allUser
+    } catch (error) {
+    console.error('Error fetching users:', error);
+    }
+}
