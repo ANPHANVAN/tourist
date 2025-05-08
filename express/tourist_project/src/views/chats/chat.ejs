@@ -117,9 +117,9 @@ body {
 
 <!-- Cột 3: Tất cả user -->
 <div class="sidebar col-md-3 p-0">
-    <div class="p-3 border-bottom">
-    <h5 class="fw-bold">All Users</h5>
-    <div class="mb-4">
+    <div class="p-2 border-bottom">
+    <!-- <h5 class="fw-bold">All Users</h5> -->
+    <div class="mb-2">
         <input type="text" id="search-input" class="form-control" placeholder="Search Users ...">
     </div>
     </div>
@@ -287,8 +287,8 @@ async function buttonNavigation(otherUserId) {
     })
 
     if (matchedConversation) {
-        const otherUser = fetchOneUser(otherUserId)
-        selectConversation(matchedConversation._id, otherUser);
+        const otherUser = await fetchOneUser(otherUserId)
+        selectConversation(matchedConversation._id, otherUser.user);
     } else {
         createConversation(otherUserId);
     }
