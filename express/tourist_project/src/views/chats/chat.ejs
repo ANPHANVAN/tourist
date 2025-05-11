@@ -256,7 +256,7 @@ body {
         }
 
         // Lấy tin nhắn cuối cùng (nếu có)
-        let lastMessage = conv.message && conv.message.length > 0 ? conv.message[conv.message.length - 1] : null;
+        let lastMessage = conv.message;
         let lastMessageText = lastMessage
             ? (lastMessage.text.length > 20 ? lastMessage.text.slice(0, 20) + '...' : lastMessage.text)
             : 'No messages yet';
