@@ -4,6 +4,10 @@ const ConversationSchema = new mongoose.Schema({
     name_conversation: {
         type: String,
     },
+    avatar_conversation: {
+        type: String,
+        default: 'https://upload.wikimedia.org/wikipedia/en/8/86/Avatar_Aang.png'
+    },
     user: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
