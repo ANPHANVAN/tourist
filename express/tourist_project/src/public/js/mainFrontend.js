@@ -39,3 +39,14 @@ async function fetchAllUser() {
     console.error('Error fetching users:', error);
     }
 }
+
+// Fetch current User
+async function fetchCurrentUser() {
+    try {
+    const response = await fetch(`/api/user-current`);
+    const user = await response.json();
+    return user.user
+    } catch (error) {
+    console.error('Error fetching users:', error);
+    }
+}

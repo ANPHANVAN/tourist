@@ -20,7 +20,7 @@
       <div class="col-md-4">
         <h2 class="mb-2"><%= user.fullname %></h2>
         <p class="text-muted mb-3"><%= user.bio %></p>
-        <a href="/me/<%= user._id %>/edit" class="btn btn-primary mb-3">Edit Profile</a>
+        <a id="edit-user-information" href="/me/<%= user._id %>/edit" class="btn btn-primary mb-3">Edit Profile</a>
       </div>
       <div class="col-md-8">
         <!-- Form đăng bài -->
@@ -59,7 +59,18 @@
         </div>
         <script>
           // Gọi hàm fetchPosts khi trang được tải
-          document.addEventListener('DOMContentLoaded', ()=> fetchPosts('<%= user._id %>'));
+          document.addEventListener('DOMContentLoaded', ()=> fetchPosts('<%= user._id %>'),hideEditProfileAnotherUser());
+
+          async function hideEditProfileAnotherUser() {
+            const pathParts = window.location.pathname.split('/');
+            const paramsId = pathParts[pathParts.length - 1];
+            const user = await fetchCurrentUser()
+            if (paramsId != user._id) {
+              $('#edit-user-information').hide()
+              return
+            }
+            return
+          }
         </script>
       </div>
     </div>
