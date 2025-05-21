@@ -1,7 +1,7 @@
 
   // Hàm render bài đăng
   async function renderPosts(posts) {
-    console.log('Render posts:', posts);
+    const userCurrent = await fetchCurrentUser()
     const postsContainer = document.getElementById('postsContainer');
     postsContainer.innerHTML = '';
 
@@ -14,12 +14,21 @@
       const postElement = document.createElement('div');
       postElement.classList.add('card', 'shadow-sm', 'mb-4', 'border-0');
 
+      // check currentUser just liked post
+      let checkCurrentUserLikedPost = false
+      for (let i = 0; i < post.like_user.length; i++) {
+        if (post.like_user[i] == userCurrent._id) {
+          checkCurrentUserLikedPost = true
+          break
+        }
+      }
+
       postElement.innerHTML = `
         <!-- Header bài đăng -->
         <div class="card-header bg-white border-0 d-flex align-items-center">
           <img src="${post.user.avatar}" alt="Avatar" class="rounded-circle me-3" style="width: 50px; height: 50px; object-fit: cover;">
           <div>
-            <h6 class="mb-0 fw-bold">${post.user.fullname}</h6>
+            <h6 class="mb-0 fw-bold" onclick="window.location.href='/me/${post.user._id}'" style="cursor: pointer;">${post.user.fullname}</h6>
             <small class="text-muted">${new Date(post.createdAt).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</small>
           </div>
         </div>
@@ -39,9 +48,16 @@
         <!-- Footer bài đăng (Like, Comment) -->
         <div class="card-footer bg-white border-0">
           <div class="d-flex align-items-center mb-2">
-            <button class="btn btn-outline-primary btn-sm like-btn me-2" data-id="${post._id}">
+
+          ${checkCurrentUserLikedPost ? 
+            `<button class="btn btn-outline-primary btn-sm like-btn me-2 liked" data-id="${post._id}">
               <i class="bi bi-heart-fill me-1"></i> Like (<span class="like-count">${post.likes}</span>)
-            </button>
+            </button>`
+            :
+            `<button class="btn btn-outline-primary btn-sm like-btn me-2" data-id="${post._id}">
+              <i class="bi bi-heart-fill me-1"></i> Like (<span class="like-count">${post.likes}</span>)
+            </button>`
+          }
             <button class="btn btn-outline-secondary btn-sm comment-btn" data-id="${post._id}">
               <i class="bi bi-chat-left-text-fill me-1"></i> Comment (${post.comments ? post.comments.length : 0})
             </button>
@@ -53,9 +69,9 @@
               ${post.comments && post.comments.length > 0 ? post.comments.map(comment => 
               `
                 <div class="d-flex align-items-start mb-2">
-                  <img src="https://via.placeholder.com/30?text=User" alt="Avatar" class="rounded-circle me-2" style="width: 30px; height: 30px; object-fit: cover;">
+                  <img src="${comment.user.avatar}" alt="Avatar" class="rounded-circle me-2" style="width: 30px; height: 30px; object-fit: cover;">
                   <div class="bg-light p-2 rounded">
-                    <strong>${comment.user.fullname}</strong>
+                    <strong  onclick="window.location.href='/me/${comment.user._id}'" style="cursor: pointer;">${comment.user.fullname}</strong>
                     <p class="mb-0">${comment.content}</p>
                     <small class="text-muted">${new Date(comment.createdAt).toLocaleDateString('en-US', { hour: 'numeric', minute: 'numeric' })}</small>
                   </div>
@@ -70,7 +86,7 @@
             </form>
           </div>
         </div>
-      `;     
+      `;  
 
       postsContainer.appendChild(postElement);
     });
@@ -88,7 +104,6 @@
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
           });
-          console.log('Like response:', response);
           if (response.ok) {
             const data = await response.json();
             console.log('Like response data:', data);
@@ -142,7 +157,7 @@
             const commentDiv = document.createElement('div');
             commentDiv.classList.add('d-flex', 'align-items-start', 'mb-2');
             commentDiv.innerHTML = `
-              <img src="https://via.placeholder.com/30?text=User" alt="Avatar" class="rounded-circle me-2" style="width: 30px; height: 30px; object-fit: cover;">
+              <img src="${comment.user.avatar}" alt="Avatar" class="rounded-circle me-2" style="width: 30px; height: 30px; object-fit: cover;">
               <div class="bg-light p-2 rounded">
                 <strong>${comment.user.fullname}</strong>
                 <p class="mb-0">${comment.content}</p>
@@ -177,7 +192,6 @@
 
         const posts = await response.json();
         
-        console.log('Fetched posts:', posts);
         renderPosts(posts);
     } catch (error) {
         console.error('Error fetching posts:', error);

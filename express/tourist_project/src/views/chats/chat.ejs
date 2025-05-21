@@ -317,7 +317,7 @@
                 <div class="d-flex align-items-center">
                     ${user.online_status ? '<i class="bi bi-circle-fill text-success"></i>' : '<i class="bi bi-circle"></i> '}
                     <img src="${user.avatar}" alt="${user.fullname}" class="rounded-circle me-2" style="width: 30px; height: 30px; object-fit: cover;">
-                    <span class="user-full-name">${user.fullname}</span>
+                    <span class="user-full-name" onclick="window.location.href='/me/${user._id}'" style="cursor: pointer;">${user.fullname}</span>
                 </div>
                 <button class="btn btn-sm btn-primary ms-auto" onclick="buttonNavigation('${user._id}')">
                     <i class="bi bi-chat-left-text-fill"></i>
