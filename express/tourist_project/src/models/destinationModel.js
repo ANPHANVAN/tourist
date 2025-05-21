@@ -38,6 +38,25 @@ const Destination = new mongoose.Schema ({
         slug: 'destination_name',
         unique: true,
     },
+    like_user: {
+        type: [mongoose.Schema.Types.ObjectId],
+        ref: 'User',
+        default: []
+    },
+    like_count: {
+        type: Number,
+        default: 0
+    },
+
+    went_user: {
+        type: [mongoose.Schema.Types.ObjectId],
+        ref: 'User',
+        default: []
+    },
+    went_count: {
+        type: Number,
+        default: 0
+    },
 
     destination_address: {
         type: Object, // have full_address, country, province, district, 

@@ -1,52 +1,72 @@
-<br>
-<a href="/destination/add-new">Add New Destination</a>
-
-<div class="mb-4">
-  <input type="text" id="search-input" class="form-control" placeholder="Search destinations (Vietnamese with accents) ...">
-</div>
-
 <div class="container mt-5">
-  <h2 class="text-center mb-4">Explore Amazing Destinations</h2>
+
+  <div class="container mb-4">
+    <div class="row align-items-center">
+      <!-- Tiêu đề căn giữa -->
+      <div class="col text-center">
+        <h2 class="mb-0">Explore Amazing Destinations</h2>
+      </div>
+
+      <!-- Nút căn phải -->
+      <div class="col-auto ms-auto">
+        <a href="/destination/add-new" class="btn btn-primary">
+          Add New Destination
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="mb-4">
+    <input type="text" id="search-input" class="form-control" placeholder="Search destinations (Vietnamese with accents) ...">
+  </div>
+
   <% if (destinations.length === 0) { %>
     <p class="text-center">No destinations available.</p>
   <% } else { %>
-
     <div class="row row-cols-1 row-cols-md-3 g-4">
-      <% destinations.forEach(destination => { %>
-        <div class="col">
-          <div class="card h-100 shadow-sm">
-            <img src="<%= destination.image_link || 'https://via.placeholder.com/300' %>" 
-                 class="card-img-top" 
-                 alt="<%= destination.image_alt || 'Destination Image' %>" 
-                 style="height: 200px; object-fit: cover;">
-            <div class="card-body">
-              <h5 class="card-title"><%= destination.destination_name || 'Unknown Destination' %></h5>
-              <p class="card-text"><%= destination.short_description || 'No description available.' %></p>
-            </div>
-            <div class="card-footer d-flex justify-content-center gap-2">
-              <a href="/destination/<%= destination.slug %>" 
-                 class="btn btn-primary" 
-                 style="flex: 1; max-width: 100px;">Detail</a>
-              <button type="button" 
-                      class="btn btn-success like-btn" 
-                      style="flex: 1; max-width: 100px;"
-                      data-id="<%= destination._id %>">Like</button>
-              <button type="button" 
-                      class="btn btn-info went-btn" 
-                      style="flex: 1; max-width: 100px;"
-                      data-id="<%= destination._id %>">Went</button>
-            </div>
+    <% destinations.forEach(destination => { %>
+      <div class="col">
+        <div class="card h-100 shadow-sm">
+          <img src="<%= destination.image_link || 'https://via.placeholder.com/300' %>" 
+              class="card-img-top" 
+              alt="<%= destination.image_alt || 'Destination Image' %>" 
+              style="height: 200px; object-fit: cover;">
+          <div class="card-body">
+            <h5 class="card-title"><%= destination.destination_name || 'Unknown Destination' %></h5>
+            <p class="card-text"><%= destination.short_description || 'No description available.' %></p>
+          </div>
+          <div class="card-footer d-flex justify-content-center gap-2">
+            <a href="/destination/<%= destination.slug %>" 
+              class="btn btn-primary" 
+              style="flex: 1; max-width: 100px;">Detail</a>
+            <button type="button" 
+                    class="btn btn-outline-success like-btn" 
+                    style="flex: 1; max-width: 100px; cursor: pointer;"
+                    data-id="<%= destination._id %>"
+                    data-like-users='<%= JSON.stringify(destination.like_user || []) %>'
+                    onclick="likePatchApi('<%= destination._id %>')">Like (<%= destination.like_count %>)</button>
+            <button type="button" 
+                    class="btn btn-outline-info went-btn" 
+                    style="flex: 1; max-width: 100px; cursor: pointer;"
+                    data-id="<%= destination._id %>"
+                    data-went-users='<%= JSON.stringify(destination.went_user || []) %>'
+                    onclick="wentPatchApi('<%= destination._id %>')">Went (<%= destination.went_count %>)</button>
           </div>
         </div>
-      <% }) %>
+      </div>
+    <% }) %>
     </div>
   <% } %>
 </div>
 
 
-
 <script>
-  document.addEventListener("DOMContentLoaded", function () {
+  document.addEventListener("DOMContentLoaded", () => {
+    searchDestination();
+    changeButtonStatus();
+  });
+
+  function searchDestination() {
     const searchInput = document.getElementById("search-input");
     const cards = document.querySelectorAll(".card");
 
@@ -64,6 +84,137 @@
         }
       });
     });
-  });
-</script>
+  }
 
+  // Cập nhật trạng thái button
+  async function changeButtonStatus() {
+    const user = await fetchCurrentUser();
+    if (!user || !user._id) {
+      console.error('User not logged in or _id not found');
+      return;
+    }
+
+    const likeButtons = document.querySelectorAll('.like-btn');
+    const wentButtons = document.querySelectorAll('.went-btn');
+
+    likeButtons.forEach(button => {
+      const likeUsers = JSON.parse(button.getAttribute('data-like-users'));
+      const hasLiked = likeUsers.some(userId => userId.toString() === user._id);
+
+      if (hasLiked) {
+        button.classList.remove('btn-outline-success');
+        button.classList.add('btn-success');
+      } else {
+        button.classList.remove('btn-success');
+        button.classList.add('btn-outline-success');
+      }
+    });
+
+    wentButtons.forEach(button => {
+      const wentUsers = JSON.parse(button.getAttribute('data-went-users'));
+      const hasWent = wentUsers.some(userId => userId.toString() === user._id);
+
+      if (hasWent) {
+        button.classList.remove('btn-outline-info');
+        button.classList.add('btn-info');
+      } else {
+        button.classList.remove('btn-info');
+        button.classList.add('btn-outline-info');
+      }
+    });
+  }
+
+  // PATCH button like
+  async function likePatchApi(destinationId) {
+    const user = await fetchCurrentUser();
+    if (!user || !user._id) {
+      alert('Please log in to like a destination.');
+      return;
+    }
+
+    try {
+      const response = await fetch(`/destination/api/${destinationId}/like`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          destinationId: destinationId,
+          currentUserId: user._id
+        })
+      });
+
+      const result = await response.json();
+      console.log(result);
+
+      // Cập nhật giao diện sau khi gọi API
+      const button = document.querySelector(`.like-btn[data-id="${destinationId}"]`);
+      let currentCount = parseInt(button.textContent.match(/\d+/)[0]);
+
+      if (result.message === 'Liked') {
+        currentCount += 1;
+        const likeUsers = JSON.parse(button.getAttribute('data-like-users'));
+        likeUsers.push(user._id);
+        button.setAttribute('data-like-users', JSON.stringify(likeUsers));
+      } else if (result.message === 'UnLike') {
+        currentCount -= 1;
+        const likeUsers = JSON.parse(button.getAttribute('data-like-users'));
+        const updatedUsers = likeUsers.filter(userId => userId.toString() !== user._id);
+        button.setAttribute('data-like-users', JSON.stringify(updatedUsers));
+      }
+
+      button.textContent = `Like (${currentCount})`;
+      changeButtonStatus(); // Cập nhật trạng thái button
+    } catch (error) {
+      console.error('Error liking destination:', error);
+      alert('Failed to like/unlike destination.');
+    }
+  }
+
+  // PATCH button went
+  async function wentPatchApi(destinationId) {
+    const user = await fetchCurrentUser();
+    if (!user || !user._id) {
+      alert('Please log in to mark a destination as went.');
+      return;
+    }
+
+    try {
+      const response = await fetch(`/destination/api/${destinationId}/went`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          destinationId: destinationId,
+          currentUserId: user._id
+        })
+      });
+
+      const result = await response.json();
+      console.log(result);
+
+      // Cập nhật giao diện sau khi gọi API
+      const button = document.querySelector(`.went-btn[data-id="${destinationId}"]`);
+      let currentCount = parseInt(button.textContent.match(/\d+/)[0]);
+
+      if (result.message === 'Wented') {
+        currentCount += 1;
+        const wentUsers = JSON.parse(button.getAttribute('data-went-users'));
+        wentUsers.push(user._id);
+        button.setAttribute('data-went-users', JSON.stringify(wentUsers));
+      } else if (result.message === 'UnWent') {
+        currentCount -= 1;
+        const wentUsers = JSON.parse(button.getAttribute('data-went-users'));
+        const updatedUsers = wentUsers.filter(userId => userId.toString() !== user._id);
+        button.setAttribute('data-went-users', JSON.stringify(updatedUsers));
+      }
+
+      button.textContent = `Went (${currentCount})`;
+      changeButtonStatus(); // Cập nhật trạng thái button
+    } catch (error) {
+      console.error('Error marking went:', error);
+      alert('Failed to mark/unmark went.');
+    }
+  }
+</script>
