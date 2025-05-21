@@ -25,7 +25,7 @@ const UserMongoSchema = new mongoose.Schema({
     },
     cover_picture: {
         type: String,
-        
+        default: 'https://ichef.bbci.co.uk/ace/standard/2560/cpsprodpb/b2d0/live/d4d933e0-8a17-11ef-bfd3-790fcba1cccf.jpg'
     },
     bio: {
         type: String,
