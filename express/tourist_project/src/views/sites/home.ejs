@@ -1,5 +1,273 @@
-<div class="container mt-5">
-  <h1>Welcome to Tourist App</h1>
-  <p>Explore the best destinations with us!</p>
-  <button class="btn btn-primary">Discover Now</button>
-</div>
+  <div class="container mt-5">
+    <div class="container mb-4">
+      <div class="row align-items-center">
+        <div class="col text-center">
+          <h2 class="mb-0">Suggestion Destinations For You</h2>
+        </div>
+      </div>
+    </div>
+
+    <div id="destinations-container"></div>
+  </div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    fetchAndRenderDestinations();
+    searchDestination();
+    changeButtonStatus();
+  });
+
+    async function fetchAndRenderDestinations() {
+      try {
+        const user = await fetchCurrentUser()
+        const response = await fetch(`http://localhost:5000/${user._id}`); // Adjust endpoint as needed
+        const destinationsResponse = await response.json();
+        const destinations = destinationsResponse.suggestions || []
+        console.log(destinations);
+
+        const container = document.getElementById('destinations-container');
+        container.innerHTML = ''; // Clear any existing content
+
+        if (destinations.length === 0) {
+          container.innerHTML = '<p class="text-center">No destinations available.</p>';
+          return;
+        }
+
+        // Create the grid layout for destinations
+        const row = document.createElement('div');
+        row.className = 'row row-cols-1 row-cols-md-3 g-4';
+
+        destinations.forEach(destination => {
+          const col = document.createElement('div');
+          col.className = 'col';
+
+          // Create the card for each destination
+          const card = document.createElement('div');
+          card.className = 'card h-100 shadow-sm';
+
+          // Card image
+          const img = document.createElement('img');
+          img.src = destination.image_link || 'https://via.placeholder.com/300';
+          img.className = 'card-img-top';
+          img.alt = destination.image_alt || 'Destination Image';
+          img.style.height = '200px';
+          img.style.objectFit = 'cover';
+
+          // Card body
+          const cardBody = document.createElement('div');
+          cardBody.className = 'card-body';
+          const title = document.createElement('h5');
+          title.className = 'card-title';
+          title.textContent = destination.destination_name || 'Unknown Destination';
+          const description = document.createElement('p');
+          description.className = 'card-text';
+          description.textContent = destination.short_description || 'No description available.';
+
+          cardBody.appendChild(title);
+          cardBody.appendChild(description);
+
+          // Card footer with buttons
+          const cardFooter = document.createElement('div');
+          cardFooter.className = 'card-footer d-flex justify-content-center gap-2';
+
+          const detailBtn = document.createElement('a');
+          detailBtn.href = `/destination/${destination.slug}`;
+          detailBtn.className = 'btn btn-primary';
+          detailBtn.style.flex = '1';
+          detailBtn.style.maxWidth = '100px';
+          detailBtn.textContent = 'Detail';
+
+          const likeBtn = document.createElement('button');
+          likeBtn.type = 'button';
+          likeBtn.className = 'btn btn-outline-success like-btn';
+          likeBtn.style.flex = '1';
+          likeBtn.style.maxWidth = '100px';
+          likeBtn.style.cursor = 'pointer';
+          likeBtn.dataset.id = destination._id;
+          likeBtn.dataset.likeUsers = JSON.stringify(destination.like_user || []);
+          likeBtn.textContent = `Like (${destination.like_count || 0})`;
+          likeBtn.onclick = () => likePatchApi(destination._id);
+
+          const wentBtn = document.createElement('button');
+          wentBtn.type = 'button';
+          wentBtn.className = 'btn btn-outline-info went-btn';
+          wentBtn.style.flex = '1';
+          wentBtn.style.maxWidth = '100px';
+          wentBtn.style.cursor = 'pointer';
+          wentBtn.dataset.id = destination._id;
+          wentBtn.dataset.wentUsers = JSON.stringify(destination.went_user || []);
+          wentBtn.textContent = `Went (${destination.went_count || 0})`;
+          wentBtn.onclick = () => wentPatchApi(destination._id);
+
+          cardFooter.appendChild(detailBtn);
+          cardFooter.appendChild(likeBtn);
+          cardFooter.appendChild(wentBtn);
+
+          // Assemble the card
+          card.appendChild(img);
+          card.appendChild(cardBody);
+          card.appendChild(cardFooter);
+          col.appendChild(card);
+          row.appendChild(col);
+        });
+
+        container.appendChild(row);
+      } catch (error) {
+        console.error('Error fetching destinations:', error);
+        document.getElementById('destinations-container').innerHTML = 
+          '<p class="text-center">Error loading destinations. Please try again later.</p>';
+      }
+    }
+
+  function searchDestination() {
+    const searchInput = document.getElementById("search-input");
+    const cards = document.querySelectorAll(".card");
+
+    searchInput.addEventListener("input", function () {
+      const query = this.value.toLowerCase();
+
+      cards.forEach(card => {
+        const text = card.querySelector(".card-text").innerText.toLowerCase();
+        const title = card.querySelector(".card-title").innerText.toLowerCase();
+
+        if (text.includes(query) || title.includes(query)) {
+          card.closest(".col").style.display = "block";
+        } else {
+          card.closest(".col").style.display = "none";
+        }
+      });
+    });
+  }
+
+  // Cập nhật trạng thái button
+  async function changeButtonStatus() {
+    const user = await fetchCurrentUser();
+    if (!user || !user._id) {
+      console.error('User not logged in or _id not found');
+      return;
+    }
+
+    const likeButtons = document.querySelectorAll('.like-btn');
+    const wentButtons = document.querySelectorAll('.went-btn');
+
+    likeButtons.forEach(button => {
+      const likeUsers = JSON.parse(button.getAttribute('data-like-users'));
+      const hasLiked = likeUsers.some(userId => userId.toString() === user._id);
+
+      if (hasLiked) {
+        button.classList.remove('btn-outline-success');
+        button.classList.add('btn-success');
+      } else {
+        button.classList.remove('btn-success');
+        button.classList.add('btn-outline-success');
+      }
+    });
+
+    wentButtons.forEach(button => {
+      const wentUsers = JSON.parse(button.getAttribute('data-went-users'));
+      const hasWent = wentUsers.some(userId => userId.toString() === user._id);
+
+      if (hasWent) {
+        button.classList.remove('btn-outline-info');
+        button.classList.add('btn-info');
+      } else {
+        button.classList.remove('btn-info');
+        button.classList.add('btn-outline-info');
+      }
+    });
+  }
+
+  // PATCH button like
+  async function likePatchApi(destinationId) {
+    const user = await fetchCurrentUser();
+    if (!user || !user._id) {
+      alert('Please log in to like a destination.');
+      return;
+    }
+
+    try {
+      const response = await fetch(`/destination/api/${destinationId}/like`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          destinationId: destinationId,
+          currentUserId: user._id
+        })
+      });
+
+      const result = await response.json();
+      console.log(result);
+
+      // Cập nhật giao diện sau khi gọi API
+      const button = document.querySelector(`.like-btn[data-id="${destinationId}"]`);
+      let currentCount = parseInt(button.textContent.match(/\d+/)[0]);
+
+      if (result.message === 'Liked') {
+        currentCount += 1;
+        const likeUsers = JSON.parse(button.getAttribute('data-like-users'));
+        likeUsers.push(user._id);
+        button.setAttribute('data-like-users', JSON.stringify(likeUsers));
+      } else if (result.message === 'UnLike') {
+        currentCount -= 1;
+        const likeUsers = JSON.parse(button.getAttribute('data-like-users'));
+        const updatedUsers = likeUsers.filter(userId => userId.toString() !== user._id);
+        button.setAttribute('data-like-users', JSON.stringify(updatedUsers));
+      }
+
+      button.textContent = `Like (${currentCount})`;
+      changeButtonStatus(); // Cập nhật trạng thái button
+    } catch (error) {
+      console.error('Error liking destination:', error);
+      alert('Failed to like/unlike destination.');
+    }
+  }
+
+  // PATCH button went
+  async function wentPatchApi(destinationId) {
+    const user = await fetchCurrentUser();
+    if (!user || !user._id) {
+      alert('Please log in to mark a destination as went.');
+      return;
+    }
+
+    try {
+      const response = await fetch(`/destination/api/${destinationId}/went`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          destinationId: destinationId,
+          currentUserId: user._id
+        })
+      });
+
+      const result = await response.json();
+      console.log(result);
+
+      // Cập nhật giao diện sau khi gọi API
+      const button = document.querySelector(`.went-btn[data-id="${destinationId}"]`);
+      let currentCount = parseInt(button.textContent.match(/\d+/)[0]);
+
+      if (result.message === 'Wented') {
+        currentCount += 1;
+        const wentUsers = JSON.parse(button.getAttribute('data-went-users'));
+        wentUsers.push(user._id);
+        button.setAttribute('data-went-users', JSON.stringify(wentUsers));
+      } else if (result.message === 'UnWent') {
+        currentCount -= 1;
+        const wentUsers = JSON.parse(button.getAttribute('data-went-users'));
+        const updatedUsers = wentUsers.filter(userId => userId.toString() !== user._id);
+        button.setAttribute('data-went-users', JSON.stringify(updatedUsers));
+      }
+
+      button.textContent = `Went (${currentCount})`;
+      changeButtonStatus(); // Cập nhật trạng thái button
+    } catch (error) {
+      console.error('Error marking went:', error);
+      alert('Failed to mark/unmark went.');
+    }
+  }
+</script>
