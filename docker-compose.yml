@@ -165,6 +165,7 @@ services:
       dockerfile: Dockerfile
     environment:
       - NODE_ENV=development
+      - PYTHONUNBUFFERED=1
       - POSTGRES_HOST=${POSTGRES_HOST}
       - POSTGRES_PORT=${POSTGRES_PORT}
       - POSTGRES_USER=${POSTGRES_USER}

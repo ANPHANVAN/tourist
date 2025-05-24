@@ -18,3 +18,5 @@ __pycache__/
 0_plan/
 0_plan/task.xlsx
 *.xlsx
+
+*.pem

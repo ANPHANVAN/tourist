@@ -12,9 +12,12 @@
   <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
   <!-- Socket.IO-client -->
   <script src="/socket.io/socket.io.js"></script>
+  <!-- Icon bootstrap -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 
   <script src="/public/js/post.js"></script>
   <script src="/public/js/mainFrontend.js"></script>
+  <link rel="stylesheet" href="/public/css/style.css">
 </head>
 <body>
   <!-- Header -->
@@ -29,13 +32,5 @@
   <% if (!hideFooter) { %>
     <%- include('../partials/footer') %>
   <% } %>
-    
-  <!-- Kết nối Socket.IO (nếu cần) -->
-  <!-- <script>
-    const socket = io('http://localhost:3000'); // Thay bằng URL của Socket.IO server nếu khác
-    socket.on('connect', () => {
-      console.log('Connected to Socket.IO server');
-    });
-  </script> -->
 </body>
 </html>

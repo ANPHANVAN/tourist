@@ -1,5 +1,4 @@
-<a href="/destination">Go Back Destinations</a>
-
+<link rel="stylesheet" href="/public/css/destinationdetail.css">
 <div class="container mt-5">
   <% if (!destination) { %>
     <p class="text-center">No destination available.</p>
@@ -17,7 +16,7 @@
           <div class="card-body">
             <p class="card-text text-center fst-italic"><%= destination.image_alt || 'No description available.' %></p>
             <p class="card-text"><%= destination.description || 'No description available.' %></p>
-            <p class="card-text text-end">Likes: <%= destination.likes || 0 %> | Went: <%= destination.went || 0 %></p>
+            <p class="card-text text-end">Likes: <%= destination.like_count || 0 %> | Went: <%= destination.went_count || 0 %></p>
           </div>
           <div class="card-footer d-flex justify-content-center gap-2">
             <button type="button" 
