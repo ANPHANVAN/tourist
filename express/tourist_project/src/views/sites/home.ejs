@@ -21,7 +21,7 @@
     async function fetchAndRenderDestinations() {
       try {
         const user = await fetchCurrentUser()
-        const response = await fetch(`<%=FINAL_HOST%>/${user._id}`); // Adjust endpoint as needed
+        const response = await fetch(`<%=FINAL_HOST%>:5000/${user._id}`); // Adjust endpoint as needed
         const destinationsResponse = await response.json();
         const destinations = destinationsResponse.suggestions || []
         console.log(destinations);

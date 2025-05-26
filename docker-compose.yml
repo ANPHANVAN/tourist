@@ -9,6 +9,7 @@ services:
       - app-network
     volumes:
       - ./consumer:/tourist_project
+      - /tourist_project/node_modules
     environment:
       - POSTGRES_HOST=${POSTGRES_HOST}
       - POSTGRES_PORT=${POSTGRES_PORT}
@@ -138,6 +139,7 @@ services:
       - "3000"
     volumes:
       - ./express/tourist_project:/tourist_project
+      - /tourist_project/node_modules
     depends_on:
       postgres:
         condition: service_healthy
