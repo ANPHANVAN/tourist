@@ -11,6 +11,7 @@ const session = require('./config/session');
 // const upload = multer({ dest: 'uploads/' });
 require('dotenv').config();
 
+const FINAL_HOST = process.env.FINAL_HOST
 // import from my file
 const route = require('./routes');
 const mongodb = require('./config/db/mongodb');
@@ -45,5 +46,5 @@ app.use(cookieParser());
 route(app);
 
 server.listen(port, () => {
-    console.log(`Server is running on http://localhost:${port}`);
+    console.log(`Server is running on ${FINAL_HOST}:${port}`);
 });
