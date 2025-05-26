@@ -17,8 +17,8 @@ const mongodb = require('./config/db/mongodb');
 mongodb.connect()
 const postgre = require('./config/db/postgres');
 postgre.connect()
-const redis = require('./config/db/redis');
-redis.connect()
+// const redis = require('./config/db/redis');
+// redis.connect()
 const rabbitmq = require('./config/rabbitmq');
 rabbitmq.connectRabbitMQ()
 
