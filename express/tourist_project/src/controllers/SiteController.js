@@ -1,3 +1,4 @@
+const FINAL_HOST = process.env.FINAL_HOST
 const JWT_SECRET = process.env.JWT_SECRET
 const User  = require('../models/userModel');
 const jwt = require('jsonwebtoken')
@@ -7,7 +8,7 @@ const {pushlishUserEvent} = require('../services/queueRabbitService')
 class SiteController {
     async index(req,res,next){
         try {
-            res.render('sites/home');
+            res.render('sites/home', {FINAL_HOST: FINAL_HOST});
         } catch (err) {
             console.error('Error fetching data:', err);
             res.status(500).send('Internal Server Error');
