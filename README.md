@@ -77,5 +77,5 @@ This project is a personal endeavor to explore full-stack development and micros
 ## Contact
 - **Author:** Phan Van An
 - **Email:** anphan.mainwork@gmail.com
-- **LinkedIn:** [Your LinkedIn Profile](https://www.linkedin.com/in/anphanvan/)
-- **GitHub:** [Your GitHub](https://github.com/ANPHANVAN)
+- **LinkedIn:** [An Phan Van](https://www.linkedin.com/in/anphanvan/)
+- **GitHub:** [ANPHANVAN](https://github.com/ANPHANVAN)
