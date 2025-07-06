@@ -21,3 +21,5 @@ __pycache__/
 
 *.pem
 .database
+
+nginx/certbot

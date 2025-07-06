@@ -18,28 +18,9 @@ http {
  #   server flask:5000; # Trỏ đến container flask trong app-network
   #}
 
-  # Cấu hình máy chủ
-#  server {
- #   listen 80; # Lắng nghe trên cổng 80 (HTTP)
-
-  #  server_name tourist.hdp.io.vn www.tourist.hdp.io.vn; # Thay bằng domain của bạn
-   # location /.well-known/acme-challenge/ {
-    #    root /var/www/certbot;
-    #}
-#}
-
 server {
     listen 80;
-    server_name tourist.hdp.io.vn www.tourist.hdp.io.vn;
-    return 301 https://$host$request_uri; # Chuyển hướng tất cả HTTP sang HTTPS
-}
-
-server {
-    listen 443 ssl;
         server_name tourist.hdp.io.vn www.tourist.hdp.io.vn;
-
-    ssl_certificate /etc/letsencrypt/live/tourist.hdp.io.vn/fullchain.pem;
-    ssl_certificate_key /etc/letsencrypt/live/tourist.hdp.io.vn/privkey.pem;
 
     location /.well-known/acme-challenge/ {
         root /var/www/certbot;
