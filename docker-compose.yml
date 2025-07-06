@@ -232,6 +232,21 @@ services:
         max-size: "10m"
         max-file: "3"
 
+  certbot:
+    image: certbot/certbot
+    container_name: tourist-certbot
+    volumes:
+      - ./nginx/certbot/www:/var/www/certbot
+      - ./nginx/certbot/conf:/etc/letsencrypt
+      - ./nginx/certbot/log:/var/log/letsencrypt
+    #entrypoint: /bin/sh -c "sleep 10"  # tạo container rồi bạn sẽ run lệnh sau
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+
 networks:
   app-network:
     driver: bridge
